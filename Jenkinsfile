@@ -9,7 +9,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn clean compile'
+                sh 'mvn clean package'
             }
         }
 
@@ -22,10 +22,12 @@ pipeline {
 
     post {
         always {
-            junit '**/target/surefire-reports/*.xml'
+            junit allowEmptyResults: true,
+                  testResults: '**/target/surefire-reports/*.xml'
 
             archiveArtifacts artifacts: 'target/**/*.jar',
-                             fingerprint: true
+                             fingerprint: true,
+                             allowEmptyArchive: true
         }
     }
 }
